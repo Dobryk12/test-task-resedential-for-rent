@@ -3,6 +3,7 @@ import bs4
 import asyncio
 import requests
 from selenium import webdriver
+from selenium.common import TimeoutException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -88,6 +89,8 @@ async def get_images(soup, link):
 
         else:
             image_urls = ["Фотографії відсутні"]
+    except TimeoutException:
+        image_urls = ["Фотографії відсутні"]
 
     finally:
         driver.quit()

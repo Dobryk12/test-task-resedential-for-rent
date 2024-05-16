@@ -43,7 +43,7 @@ async def get_links():
                     button.click()
                     await asyncio.sleep(3)
                 except:
-                    print("Кнопку не знайдено або не можна клацнути на неї")
+                    print("No button")
 
     driver.quit()
 

@@ -24,14 +24,17 @@ async def get_links():
     driver.get(BASE_URL)
     await asyncio.sleep(3)
 
-    url_links = []
-    for _ in range(3):
+    url_set = set()  # Використовуємо set для тимчасового зберігання унікальних URL-адрес
+
+    for _ in range(5):
         count = 0
         while count < 20:
             soup = bs4.BeautifulSoup(driver.page_source, 'html.parser')
             addresses = soup.select(".property-thumbnail-item.thumbnailItem.col-12.col-sm-6.col-md-4.col-lg-3")
-            url_links.extend(
-                ["https://realtylink.org" + address.select_one(".a-more-detail").get("href") for address in addresses])
+
+            # Додаємо унікальні URL-адреси до множини
+            for address in addresses:
+                url_set.add("https://realtylink.org" + address.select_one(".a-more-detail").get("href"))
 
             count += len(addresses)
 
@@ -44,6 +47,8 @@ async def get_links():
                     print("Кнопку не знайдено або не можна клацнути на неї")
 
     driver.quit()
+
+    url_links = list(url_set)  # Перетворюємо множину назад у список
     print(len(url_links))
     return url_links[:60]
 
